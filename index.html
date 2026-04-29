@@ -1517,11 +1517,38 @@
   });
   submitBtn.addEventListener('click', submit);
 
+  // ▼▼▼ COLOCA AQUI O URL DO TEU APPS SCRIPT (depois de fazeres o Deploy) ▼▼▼
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFKP3aEuRhS4fCx31V0hKn4eATcllDwEODD0ci8zbEjQA2tiQepnxH5FfNjkvLF0gc/exec';
+
+  function sendToSheet(email) {
+    // Apps Script web apps preferem text/plain para evitar preflight CORS
+    const payload = JSON.stringify({ email: email });
+
+    return fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: payload
+    })
+      .then(r => r.json())
+      .catch(err => {
+        console.warn('[Loopa] erro ao gravar lead:', err);
+        return { ok: false, error: String(err) };
+      });
+  }
+
   function submit() {
     if (submitBtn.disabled) return;
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     emailInput.disabled = true;
+
+    const email = emailInput.value.trim();
+
+    // Dispara o fetch logo no início — corre em paralelo com a animação
+    const sendPromise = (APPS_SCRIPT_URL && APPS_SCRIPT_URL.indexOf('http') === 0)
+      ? sendToSheet(email)
+      : Promise.resolve({ ok: false, error: 'no_endpoint' });
 
     const stages = [
       'A verificar acesso...',
@@ -1537,15 +1564,29 @@
         feedback.textContent = stages[i];
       } else {
         clearInterval(interval);
-        // Show success
-        formPanel.classList.remove('active');
-        setTimeout(() => {
-          successPanel.classList.add('active');
-        }, 400);
 
-        // Update system status
-        const sys = document.getElementById('sys-text');
-        if (sys) sys.textContent = 'SYS // CONNECTED';
+        // Espera que o fetch termine antes de revelar sucesso
+        sendPromise.then(result => {
+          if (result && result.ok) {
+            formPanel.classList.remove('active');
+            setTimeout(() => successPanel.classList.add('active'), 400);
+            const sys = document.getElementById('sys-text');
+            if (sys) sys.textContent = 'SYS // CONNECTED';
+          } else if (result && result.duplicate) {
+            // Email já estava registado — também mostra sucesso (boa UX)
+            formPanel.classList.remove('active');
+            setTimeout(() => successPanel.classList.add('active'), 400);
+            const sys = document.getElementById('sys-text');
+            if (sys) sys.textContent = 'SYS // CONNECTED';
+          } else {
+            // Erro real — restaura input e mostra mensagem
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+            emailInput.disabled = false;
+            feedback.className = 'feedback warn';
+            feedback.textContent = 'Algo falhou. Tenta novamente.';
+          }
+        });
       }
     }, 700);
   }
