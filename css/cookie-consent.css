@@ -1,0 +1,422 @@
+/* =========================================================
+   COOKIE CONSENT BANNER
+   Premium, Glassmorphism, GDPR Compliant
+   ========================================================= */
+
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  max-width: 100%;
+  margin: 0 auto;
+  z-index: 9999;
+  font-family: var(--mono);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .cookie-banner {
+    left: 40px;
+    right: auto;
+    max-width: 500px;
+  }
+}
+
+.cookie-banner.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.cookie-banner.hidden {
+  display: none !important;
+}
+
+.cookie-banner-content {
+  position: relative;
+  background: rgba(12, 17, 21, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(88, 185, 162, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.cookie-banner-content::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(88, 185, 162, 0.4), transparent);
+}
+
+.cookie-header {
+  margin-bottom: 20px;
+}
+
+.cookie-title {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--fg-1);
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.cookie-title em {
+  font-style: italic;
+  color: var(--teal-bright);
+}
+
+.cookie-desc {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--fg-2);
+}
+
+.cookie-desc a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-decoration-color: rgba(88, 185, 162, 0.4);
+  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+}
+
+.cookie-desc a:hover {
+  color: var(--teal-bright);
+  text-decoration-color: var(--teal-bright);
+}
+
+.cookie-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .cookie-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.cookie-btn {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.cookie-btn-primary {
+  background: linear-gradient(120deg, var(--teal-bright), var(--teal));
+  color: var(--bg-0);
+  border: none;
+  font-weight: 500;
+}
+
+.cookie-btn-primary:hover {
+  box-shadow: var(--glow-teal);
+  transform: translateY(-1px);
+}
+
+.cookie-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--fg-1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cookie-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(88, 185, 162, 0.4);
+}
+
+.cookie-btn-text {
+  background: transparent;
+  color: var(--fg-3);
+  border: 1px solid transparent;
+}
+
+.cookie-btn-text:hover {
+  color: var(--fg-1);
+}
+
+/* =========================================================
+   SETTINGS PANEL & OVERLAY
+   ========================================================= */
+
+.cookie-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 9, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s var(--ease-out), visibility 0.4s;
+}
+
+.cookie-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cookie-settings-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%) scale(0.95);
+  width: 90%;
+  max-width: 540px;
+  max-height: 90vh;
+  background: var(--bg-1);
+  border: 1px solid rgba(88, 185, 162, 0.2);
+  border-radius: 16px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s var(--ease-out);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.cookie-settings-panel.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cookie-settings-panel.hidden {
+  display: none !important;
+}
+
+.cookie-settings-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cookie-settings-title {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--fg-1);
+}
+
+.cookie-settings-title em {
+  font-style: italic;
+  color: var(--teal);
+}
+
+.cookie-settings-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: var(--fg-2);
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cookie-settings-close:hover {
+  background: rgba(88, 185, 162, 0.15);
+  color: var(--teal-bright);
+}
+
+.cookie-settings-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.cookie-settings-body::-webkit-scrollbar {
+  width: 6px;
+}
+.cookie-settings-body::-webkit-scrollbar-track {
+  background: var(--bg-2);
+}
+.cookie-settings-body::-webkit-scrollbar-thumb {
+  background: rgba(88, 185, 162, 0.3);
+  border-radius: 10px;
+}
+
+.cookie-settings-desc {
+  font-size: 13px;
+  color: var(--fg-2);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.cookie-category {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: border-color 0.3s ease;
+}
+
+.cookie-category:hover {
+  border-color: rgba(88, 185, 162, 0.2);
+}
+
+.cookie-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.cookie-category h3 {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--fg-1);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.cookie-category p {
+  font-size: 12px;
+  color: var(--fg-3);
+  line-height: 1.5;
+}
+
+.cookie-settings-footer {
+  padding: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* =========================================================
+   TOGGLE SWITCH
+   ========================================================= */
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: .4s;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--fg-2);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--teal);
+  border-color: var(--teal-bright);
+  box-shadow: 0 0 10px rgba(88, 185, 162, 0.3);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+  background-color: var(--bg-0);
+}
+
+.toggle-switch.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toggle-switch.disabled .slider {
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   REOPEN BUTTON
+   ========================================================= */
+
+.cookie-reopen-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(12, 17, 21, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(88, 185, 162, 0.3);
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9997;
+  transition: all 0.3s var(--ease-out);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-reopen-btn svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.cookie-reopen-btn:hover {
+  background: rgba(12, 17, 21, 0.9);
+  border-color: var(--teal-bright);
+  box-shadow: var(--glow-teal);
+  transform: translateY(-2px);
+}
+
+.cookie-reopen-btn:hover svg {
+  transform: rotate(90deg);
+}
+
+.cookie-reopen-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
